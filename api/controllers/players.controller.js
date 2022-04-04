@@ -98,8 +98,11 @@ const updateOne = function (req, res) {
 const _updatePlayer = function (req, res, team) {
     const playerId = req.params.playerId;
     if(team.players.id(playerId)){
-        team.players.id(playerId).name = req.body.name;
-        team.players.id(playerId).age = req.body.age;
+        if(req.body.name)
+            team.players.id(playerId).name = req.body.name;
+        if(req.body.age)
+            team.players.id(playerId).age = req.body.age;
+            
         team.save(function (err, updatedTeam) {
             const response = { status: 200, message: [] };
             if (err) {
