@@ -1,7 +1,7 @@
 const express= require("express");
 const router= express.Router();
-const teamsController= require("../controllers/teams.controller");
-const playersController= require("../controllers/player.controller");
+const teamsController= require("../controllers/TennisTeams.controller");
+const playersController= require("../controllers/players.controller");
 
 router.route("/teams")
 .post(teamsController.addOne)

@@ -67,7 +67,11 @@ const addOne = function (req, res) {
 const updateOne = function (req, res) {
     console.log("Team UpdateOne request");
     const teamId = req.params.teamId;
-    Team.findById(teamId).exec(function (err, team) {
+    Team.findByIdAndUpdate(teamId,{
+        country:req.body.country,
+        color:req.body.color,
+        year:req.body.year
+    },{new:true}).exec(function (err, team) {
         const response = {
             status: 200,
             message: team
@@ -81,27 +85,8 @@ const updateOne = function (req, res) {
             response.status = 404;
             response.message = { "message": "Team ID not found" };
         }
+        res.status(response.status).json(response.message);
 
-        if(team){
-            team.country=req.body.country;
-            team.color=req.body.color;
-            if(req.body.year)
-                team.year=req.body.year;
-                
-            team.save(function (err, updatedTeam) {
-                const response = { status: 200, message: [] };
-                if (err) {
-                    response.status = 500;
-                    response.message = err;
-                } else {
-                    response.status = 201;
-                    response.message = updatedTeam;
-                }
-                res.status(response.status).json(response.message);
-            });
-        }else{
-            res.status(response.status).json(response.message);
-        } 
     });
 }
 const deleteOne = function (req, res) {
