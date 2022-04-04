@@ -23,7 +23,10 @@ const getOne = function (req, res) {
             res.status(500).json(err);
         } else {
             console.log("Found player ", team.players.id(playerId), " for team ", team);
-            res.status(200).json(team.players.id(playerId));
+            if (team.players.id(playerId))
+                res.status(200).json(team.players.id(playerId));
+            else
+                res.status(404).json({message:"Player not found"});
         }
     });
 }
@@ -94,19 +97,24 @@ const updateOne = function (req, res) {
 
 const _updatePlayer = function (req, res, team) {
     const playerId = req.params.playerId;
-    team.players.id(playerId).name = req.body.name;
-    team.players.id(playerId).age = req.body.age;
-    team.save(function (err, updatedTeam) {
-        const response = { status: 200, message: [] };
-        if (err) {
-            response.status = 500;
-            response.message = err;
-        } else {
-            response.status = 201;
-            response.message = updatedTeam.players.id(playerId);
-        }
-        res.status(response.status).json(response.message);
-    });
+    if(team.players.id(playerId)){
+        team.players.id(playerId).name = req.body.name;
+        team.players.id(playerId).age = req.body.age;
+        team.save(function (err, updatedTeam) {
+            const response = { status: 200, message: [] };
+            if (err) {
+                response.status = 500;
+                response.message = err;
+            } else {
+                response.status = 201;
+                response.message = updatedTeam.players.id(playerId);
+            }
+            res.status(response.status).json(response.message);
+        });
+    } else {
+        res.status(404).json({ message: "Player Not Found" });
+    }
+
 }
 
 const deleteOne = function (req, res) {
@@ -148,8 +156,8 @@ const _deletePlayer = function (req, res, team) {
             }
             res.status(response.status).json(response.message);
         });
-    }else{
-        res.status(404).json({message:"Player Not Found"});
+    } else {
+        res.status(404).json({ message: "Player Not Found" });
     }
 }
 
