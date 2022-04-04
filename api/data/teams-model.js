@@ -4,7 +4,10 @@ const playerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    age: Number
+    age: {
+        type: Number,
+        required: true
+    }
 });
 
 
@@ -17,7 +20,10 @@ const teamSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    year: Number,
+    year:{
+        type: Number,
+        required: true
+    },
     players: [playerSchema]
 });
 const Team = mongoose.model("Team", teamSchema, "Teams");
